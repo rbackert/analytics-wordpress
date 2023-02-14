@@ -3,18 +3,21 @@
 class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 	protected $object;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->object = Segment_Analytics_WordPress::get_instance();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		wp_set_current_user( 0 );
 	}
 
 	public function test_segment_instance() {
-		$this->assertClassHasStaticAttribute( 'instance', 'Segment_Analytics_WordPress' );
+		$class = new ReflectionClass( 'Segment_Analytics_WordPress' );
+
+		$this->assertTrue( $class->hasProperty('instance') );
+		$this->assertTrue( $class->getProperty('instance')->isStatic() );
 	}
 
 	public function test_includes() {
@@ -57,23 +60,24 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 
 		foreach ( $ignore_user_level as $level => $role ) {
 
-			wp_set_current_user( $this->factory->user->create( array( 'role' => $role ) ) );
+			@wp_set_current_user( $this->factory->user->create( array( 'role' => $role ) ) );
 
 			$this->assertLessThanOrEqual( wp_get_current_user()->user_level, $level );
 		}
 	}
 
 	public function test_register_settings_is_setting_registered() {
-		global $new_allowlist_options;
+		global $new_allowed_options;
 
 		$this->object->register_settings();
 
 		$plugin = $this->object;
 		$slug   = $plugin::SLUG;
 
-		$this->assertArrayHasKey( $slug, $new_allowlist_options );
+		$this->assertIsArray( $new_allowed_options );
+		$this->assertArrayHasKey( $slug, $new_allowed_options );
 
-		$name = $new_allowlist_options[ $slug ];
+		$name = $new_allowed_options[ $slug ];
 
 		$this->assertContains( $this->object->get_option_name(), $name );
 	}
@@ -148,7 +152,7 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 	}
 
 	public function test_logged_in_user_identify() {
-		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
+		@wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
 		$this->assertNotEmpty( $this->object->get_current_user_identify() );
 	}
 

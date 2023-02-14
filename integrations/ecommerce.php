@@ -1,13 +1,14 @@
 <?php
+/**
+ * Ecommerce
+ *
+ * @package analytics-wordpress
+ */
 
 /**
  * The Segment_Commerce abstract class is a handy, dandy abstract for eCommerce platforms to extend.
  * With a minimal amount of code, an eCommerce platform can hook into each of the registered events in Segment.
  * For examples, see the integrations in our /integrations/ecommerce folder.
- *
- * @package Segment
- * @since  1.0.0
- *
  */
 abstract class Segment_Commerce {
 
@@ -48,8 +49,9 @@ abstract class Segment_Commerce {
 	 * @since  1.0.0
 	 * @access public
 	 *
-	 * @param  string $hook  The WordPress action ( e.g. do_action( '' ) )
+	 * @param  string $hook  The WordPress action ( e.g. do_action( '' ) ).
 	 * @param  string $event The name of the function or method that handles the tracking output.
+	 * @param int    $args Optional. The number of arguments the function accepts. Default 1.
 	 * @param  object $class The class, if any, that contains the $event method.
 	 *
 	 * @return mixed  $registered False if no event was registered, string if function was registered, array if method.
@@ -58,7 +60,7 @@ abstract class Segment_Commerce {
 
 		$registered_events = $this->get_registered_hooks();
 
-		if ( ! in_array( $event, $registered_events ) ) {
+		if ( ! in_array( $event, $registered_events, true ) ) {
 			return false;
 		}
 
@@ -68,10 +70,10 @@ abstract class Segment_Commerce {
 
 			$registered = add_filter( $hook, array( $class, $event ), 10, $args );
 
-		} else if ( is_callable( $event ) ) {
+		} elseif ( is_callable( $event ) ) {
 
 			$this->registered_events[ $hook ] = $event;
-			$registered = add_filter( $hook, $event, 10, $args );
+			$registered                       = add_filter( $hook, $event, 10, $args );
 
 		} else {
 
@@ -104,9 +106,7 @@ abstract class Segment_Commerce {
 	 */
 	public static function bootstrap() {
 
-		if ( class_exists( 'WP_eCommerce' ) ) {
-			include_once SEG_FILE_PATH . '/integrations/ecommerce/wp-e-commerce.php';
-		} else if ( class_exists( 'WooCommerce' ) ) {
+		if ( class_exists( 'WooCommerce' ) ) {
 			include_once SEG_FILE_PATH . '/integrations/ecommerce/woocommerce.php';
 		}
 
@@ -118,7 +118,7 @@ abstract class Segment_Commerce {
 	 *
 	 * @since  1.0.0
 	 */
-	abstract function viewed_category();
+	abstract public function viewed_category();
 
 	/**
 	 * Event to be fired when a product is viewed.
@@ -126,7 +126,7 @@ abstract class Segment_Commerce {
 	 *
 	 * @since  1.0.0
 	 */
-	abstract function viewed_product();
+	abstract public function viewed_product();
 
 	/**
 	 * Event to be fired when a product is added to the cart.
@@ -134,7 +134,7 @@ abstract class Segment_Commerce {
 	 *
 	 * @since  1.0.0
 	 */
-	abstract function added_to_cart();
+	abstract public function added_to_cart();
 
 	/**
 	 * Event to be fired when a product removed from the cart.
@@ -142,7 +142,7 @@ abstract class Segment_Commerce {
 	 *
 	 * @since  1.0.0
 	 */
-	abstract function removed_from_cart();
+	abstract public function removed_from_cart();
 
 	/**
 	 * Event to be fired when an order is successfully completed.
@@ -150,7 +150,7 @@ abstract class Segment_Commerce {
 	 *
 	 * @since  1.0.0
 	 */
-	abstract function completed_order();
+	abstract public function completed_order();
 
 }
 

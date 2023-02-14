@@ -1,5 +1,13 @@
 <?php
+/**
+ * Woocommerce
+ *
+ * @package analytics-wordpress
+ */
 
+/**
+ * Woocommerce integration.
+ */
 class Segment_Commerce_Woo extends Segment_Commerce {
 
 	/**
@@ -13,18 +21,17 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 	 *
 	 * @access public
 	 * @since  1.0.0
-	 *
 	 */
 	public function init() {
 
-		$this->register_hook( 'segment_get_current_page'      , 'viewed_category'  , 1, $this );
-		$this->register_hook( 'segment_get_current_page_track', 'viewed_product'   , 1, $this );
-		$this->register_hook( 'segment_get_current_page_track', 'completed_order'  , 1, $this );
-		$this->register_hook( 'segment_get_current_page_track', 'added_to_cart'    , 2, $this );
+		$this->register_hook( 'segment_get_current_page', 'viewed_category', 1, $this );
+		$this->register_hook( 'segment_get_current_page_track', 'viewed_product', 1, $this );
+		$this->register_hook( 'segment_get_current_page_track', 'completed_order', 1, $this );
+		$this->register_hook( 'segment_get_current_page_track', 'added_to_cart', 2, $this );
 		$this->register_hook( 'segment_get_current_page_track', 'removed_from_cart', 2, $this );
 
 		/* HTTP actions */
-		add_action( 'woocommerce_add_to_cart'                   , array( $this, 'add_to_cart' )     , 10, 3 );
+		add_action( 'woocommerce_add_to_cart', array( $this, 'add_to_cart' ), 10, 3 );
 		add_action( 'woocommerce_before_cart_item_quantity_zero', array( $this, 'remove_from_cart' ), 10 );
 	}
 
@@ -47,7 +54,7 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 		if ( is_tax( 'product_cat' ) ) {
 				$page = array(
 					'page'       => single_term_title( '', false ),
-					'properties' => array()
+					'properties' => array(),
 				);
 		}
 
@@ -82,7 +89,7 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 						'name'     => $product->get_title(),
 						'price'    => $product->get_price(),
 						'category' => implode( ', ', wp_list_pluck( wc_get_product_terms( $product->ID, 'product_cat' ), 'name' ) ),
-					)
+					),
 				);
 		}
 
@@ -93,8 +100,8 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 	 * Adds product information to a Segment_Cookie when item is added to cart.
 	 *
 	 * @param string $key      Key name for item in cart.  A hash.
-	 * @param int    $id       Product ID
-	 * @param int    $quantity Item quantity
+	 * @param int    $id       Product ID.
+	 * @param int    $quantity Item quantity.
 	 *
 	 * @since  1.0.0
 	 * @access public
@@ -115,13 +122,15 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 			return;
 		}
 
-		Segment_Cookie::set_cookie( 'added_to_cart', json_encode(
+		Segment_Cookie::set_cookie(
+			'added_to_cart',
+			wp_json_encode(
 				array(
 					'ID'       => $id,
 					'quantity' => $quantity,
 					'name'     => $cart_item['data']->post->post_title,
 					'price'    => $cart_item['data']->get_price(),
-					'key'      => $key
+					'key'      => $key,
 				)
 			)
 		);
@@ -144,7 +153,9 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 
 		$track = $args[0];
 
-		if ( false !== ( $cookie = Segment_Cookie::get_cookie( 'added_to_cart' ) ) ) {
+		$cookie = Segment_Cookie::get_cookie( 'added_to_cart' );
+
+		if ( false !== $cookie ) {
 
 			if ( ! is_object( WC()->cart ) ) {
 				return $track;
@@ -153,7 +164,7 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 			$_product = json_decode( $cookie );
 
 			if ( is_object( $_product ) ) {
-				$product  = get_product( $_product->ID );
+				$product = get_product( $_product->ID );
 
 				if ( $product ) {
 					$item = array(
@@ -168,11 +179,10 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 					$track = array(
 						'event'      => __( 'Added Product', 'segment' ),
 						'properties' => $item,
-						'http_event' => 'added_to_cart'
+						'http_event' => 'added_to_cart',
 					);
 				}
 			}
-
 		}
 
 		return $track;
@@ -202,13 +212,15 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 			return;
 		}
 
-		Segment_Cookie::set_cookie( 'removed_from_cart', json_encode(
+		Segment_Cookie::set_cookie(
+			'removed_from_cart',
+			wp_json_encode(
 				array(
 					'ID'       => $cart_item->product_id,
 					'quantity' => 0,
 					'name'     => $cart_item['data']->post->post_title,
 					'price'    => $cart_item['data']->get_price(),
-					'key'      => $key
+					'key'      => $key,
 				)
 			)
 		);
@@ -230,16 +242,18 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 
 		$track = $args[0];
 
-		if ( false !== ( $cookie = Segment_Cookie::get_cookie( 'removed_from_cart' ) ) ) {
+		$cookie = Segment_Cookie::get_cookie( 'removed_from_cart' );
+
+		if ( false !== $cookie ) {
 
 			if ( ! is_object( WC()->cart ) ) {
 				return $track;
 			}
 
-			$_product  = json_decode( $cookie );
+			$_product = json_decode( $cookie );
 
 			if ( is_object( $_product ) ) {
-				$product  = get_product( $_product->ID );
+				$product = get_product( $_product->ID );
 
 				if ( $product ) {
 					$item = array(
@@ -254,7 +268,7 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 					$track = array(
 						'event'      => __( 'Removed Product', 'segment' ),
 						'properties' => $item,
-						'http_event' => 'removed_from_cart'
+						'http_event' => 'removed_from_cart',
 					);
 				}
 			}
@@ -287,12 +301,12 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 			/* Because gateways vary wildly in their usage of the status concept, we check for failure rather than success. */
 			if ( 'failed' !== $order->status ) {
 
-				$items        = $order->get_items();
-				$products     = array();
+				$items    = $order->get_items();
+				$products = array();
 
 				foreach ( $items as $item ) {
 					$_product = $order->get_product_from_item( $item );
-					$product = array(
+					$product  = array(
 						'id'       => $item->product_id,
 						'sku'      => $_product->get_sku(),
 						'name'     => $item['name'],
@@ -313,8 +327,8 @@ class Segment_Commerce_Woo extends Segment_Commerce {
 						'revenue'  => $order->get_total() - ( $order->get_total_shipping() + $order->get_total_tax() ),
 						'shipping' => $order->get_total_shipping(),
 						'tax'      => $order->get_total_tax(),
-						'products' => $products
-					)
+						'products' => $products,
+					),
 				);
 
 			}

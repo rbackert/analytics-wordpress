@@ -1,9 +1,15 @@
 <?php
-
 /**
+ * Class.Analytics
+ *
  * This exists solely for the purpose of backwards compatibility.  We do _not_ recommend using the Analytics class.
  * If you do, you do so at your own risk, a risk primarily of namespace clashes.
+ * 
+ * phpcs:ignoreFile
+ *
+ * @package analytics-wordpress
  */
+
 if ( ! class_exists( 'Analytics' ) ) {
 	class Analytics extends Segment_Analytics {
 		public function __construct() {

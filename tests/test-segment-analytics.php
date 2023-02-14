@@ -3,17 +3,20 @@
 class Segment_Analytics_Test extends WP_UnitTestCase {
 	protected $object;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->object = Segment_Analytics::get_instance();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 	}
 
 	public function test_segment_instance() {
-		$this->assertClassHasStaticAttribute( 'instance', 'Segment_Analytics' );
+		$class = new ReflectionClass( 'Segment_Analytics' );
+
+		$this->assertTrue( $class->hasProperty('instance') );
+		$this->assertTrue( $class->getProperty('instance')->isStatic() );
 	}
 
 	/**
