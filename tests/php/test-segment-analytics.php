@@ -25,15 +25,15 @@ class Segment_Analytics_Test extends WP_UnitTestCase {
 	public function test_constants() {
 
 		// Plugin File Path
-		$path = str_replace( "/tests", '', dirname( __FILE__ ) );
+		$path = str_replace( "/tests/php", '', dirname( __FILE__ ) );
 		$this->assertSame( SEG_FILE_PATH, $path );
 
 		// Plugin Folder
-		$path = str_replace( "/tests", '', dirname( plugin_basename( __FILE__ ) ) );
+		$path = str_replace( "/tests/php", '', dirname( plugin_basename( __FILE__ ) ) );
 		$this->assertSame( SEG_FOLDER, $path );
 
 		// Plugin Root File
-		$path = str_replace( "/tests", '', plugins_url( '', __FILE__ ) );
+		$path = str_replace( "/tests/php", '', plugins_url( '', __FILE__ ) );
 		$this->assertSame( SEG_URL, $path );
 
 	}

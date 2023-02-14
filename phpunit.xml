@@ -14,11 +14,11 @@
 	stopOnIncomplete="false"
 	stopOnSkipped="false"
 	verbose="true"
-	bootstrap="tests/bootstrap.php"
+	bootstrap="tests/php/bootstrap.php"
 >
 	<testsuites>
 		<testsuite name="Segment.io Analytics Test Suite">
-			<directory suffix=".php">./tests</directory>
+			<directory prefix="test" suffix=".php">./tests/php</directory>
 		</testsuite>
 	</testsuites>
 	<coverage>

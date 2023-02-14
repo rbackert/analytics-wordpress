@@ -1,0 +1,33 @@
+{
+  "name": "analytics-wordpress",
+  "version": "1.0.0",
+  "description": "The hassle-free way to integrate analytics into any WordPress site.",
+  "directories": {
+    "test": "tests/js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:staged": "lint-staged --relative",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbackert/analytics-wordpress.git"
+  },
+  "keywords": [
+    "wordpress",
+    "segment",
+    "php",
+    "wordpress-plugin"
+  ],
+  "author": "Mindgrub <wordpress@mindgrub.com>",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/rbackert/analytics-wordpress/issues"
+  },
+  "homepage": "https://github.com/rbackert/analytics-wordpress#readme",
+  "dependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2"
+  }
+}

@@ -9,6 +9,8 @@
 	<file>./integrations/</file>
 	<file>./templates/</file>
 
+	<exclude-pattern>/tests/</exclude-pattern>
+
 	<arg value="sp" /> <!-- Show sniff and progress -->
 	<arg name="colors" /> <!-- Show results with colors. Disable if working on Windows -->
 	<arg name="basepath" value="." /> <!-- Strip the file paths down to the relevant bit -->

@@ -1,5 +1,5 @@
 {
-    "name": "segment-boneyard/analytics-wordpress",
+    "name": "segment/analytics-wordpress",
     "description": "The hassle-free way to integrate analytics into any WordPress site.",
     "type": "wordpress-plugin",
     "require-dev": {
@@ -7,7 +7,8 @@
         "squizlabs/php_codesniffer": "^3.7",
         "wp-coding-standards/wpcs": "^2.3",
         "php-parallel-lint/php-parallel-lint": "^1.3",
-        "yoast/phpunit-polyfills": "^1.0"
+        "yoast/phpunit-polyfills": "^1.0",
+        "sirbrillig/phpcs-changed": "^2.10"
     },
     "license": "GPLv2",
     "authors": [
@@ -26,6 +27,7 @@
     },
     "scripts": {
         "check": "phpcs",
+        "check:changed": "phpcs-changed",
         "cf": "phpcbf",
         "test": "phpunit",
         "lint": "parallel-lint --exclude .git --exclude vendor ."
