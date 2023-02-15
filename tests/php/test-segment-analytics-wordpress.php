@@ -27,6 +27,25 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 		$this->assertFileExists( SEG_FILE_PATH . '/integrations/intercom.php' );
 	}
 
+	/**
+	 * @covers Segment_Analytics_WordPress::setup_constants
+	 */
+	public function test_constants() {
+
+		// Plugin File Path
+		$path = str_replace( "/tests/php", '', dirname( __FILE__ ) );
+		$this->assertSame( SEG_FILE_PATH, $path );
+
+		// Plugin Folder
+		$path = str_replace( "/tests/php", '', dirname( plugin_basename( __FILE__ ) ) );
+		$this->assertSame( SEG_FOLDER, $path );
+
+		// Plugin Root File
+		$path = str_replace( "/tests/php", '', plugins_url( '', __FILE__ ) );
+		$this->assertSame( SEG_URL, $path );
+
+	}
+
 	public function test_admin_actions() {
 
 		$this->assertEquals( has_action( 'admin_menu'          , array( $this->object, 'admin_menu' ) ), 10 );
@@ -93,7 +112,7 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 		$this->assertarrayHasKey( $slug, $wp_settings_sections );
 		$this->assertarrayHasKey( $slug, $wp_settings_fields );
 
-		$settings = $this->object->_get_default_settings();
+		$settings = $this->object->get_default_settings();
 
 		foreach ( $settings as $section_name => $section ) {
 
@@ -127,7 +146,7 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 			return $settings;
 		} );
 
-		$this->assertArrayNotHasKey( 'general', $this->object->_get_default_settings() );
+		$this->assertArrayNotHasKey( 'general', $this->object->get_default_settings() );
 	}
 
 	public function test_register_settings_add_default_settings() {
@@ -143,7 +162,7 @@ class Segment_Analytics_WordPress_Test extends WP_UnitTestCase {
 			return $settings;
 		} );
 
-		$this->assertArrayHasKey( 'third-party', $this->object->_get_default_settings() );
+		$this->assertArrayHasKey( 'third-party', $this->object->get_default_settings() );
 	}
 
 	public function test_logged_out_user_does_not_identify() {

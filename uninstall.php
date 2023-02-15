@@ -1,4 +1,9 @@
 <?php
+/**
+ * Uninstall
+ *
+ * @package analytics-wordpress
+ */
 
 if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();

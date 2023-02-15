@@ -5,6 +5,8 @@
 	xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
 	<description>The coding standard for the analytics-wordpress project.</description>
 
+	<file>./analytics-wordpress.php</file>
+	<file>./uninstall.php</file>
 	<file>./includes/</file>
 	<file>./integrations/</file>
 	<file>./templates/</file>
@@ -30,6 +32,8 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -42,6 +46,7 @@
 		<properties>
 			<property name="prefixes" type="array">
 				<element value="segment" />
+				<element value="seg" />
 			</property>
 		</properties>
 	</rule>
