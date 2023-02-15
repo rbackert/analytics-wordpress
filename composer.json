@@ -17,9 +17,7 @@
             "email": "wordpress@mindgrub.com"
         }
     ],
-    "require": {
-        "segmentio/analytics-php": "^3.5"
-    },
+    "require": {},
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
