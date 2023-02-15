@@ -26,7 +26,7 @@
     "url": "https://github.com/rbackert/analytics-wordpress/issues"
   },
   "homepage": "https://github.com/rbackert/analytics-wordpress#readme",
-  "dependencies": {
+  "devDependencies": {
     "husky": "^8.0.3",
     "lint-staged": "^13.1.2"
   }
