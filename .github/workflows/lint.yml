@@ -1,0 +1,50 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  sniff:
+    name: sniff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: Install PHP dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Lint PHP files
+        run: composer run-script check -- -q --report=checkstyle | cs2pr
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: Install PHP dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Lint PHP files
+        run: composer run-script lint -- --checkstyle | cs2pr

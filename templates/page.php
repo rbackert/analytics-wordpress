@@ -1,24 +1,36 @@
- <script type="text/javascript">
-  analytics.page(<?php echo '"' . esc_js( $category ) . '"' ?><?php if ( ! empty( $name ) ) echo ', "' . esc_js( $name ) . '"' ?><?php if ( ! empty( $properties ) ) { echo ', ' . json_encode( Segment_Analytics_WordPress::esc_js_deep( $properties ) ); } else { echo ', {}'; } ?><?php if ( ! empty( $options ) ) { echo ', ' . json_encode( Segment_Analytics_WordPress::esc_js_deep( $options ) ); } ?>);
- <?php
-  	if ( $http_event ) :
-  		?>
-		analytics.ajaxurl = "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
+<?php
+/**
+ * Page
+ *
+ * @package analytics-wordpress
+ */
 
-		jQuery( document ).ready( function( $ ) {
-			var data = {
-				action : 'segment_unset_cookie',
-				key    : '<?php echo esc_js( $http_event ); ?>',
-
-			},
-			success = function( response ) {
-				console.log( response );
-			};
-
-			$.post( analytics.ajaxurl, data, success );
-		});
-
-  		<?php
-	endif;
-  ?>
+?>
+<script type="text/javascript">
+analytics.page(
+<?php
+echo implode(
+	',',
+	array(
+		( empty( $category ) ? 'null' : "'" . esc_js( $category ) . "'" ),
+		( empty( $name ) ? 'null' : "'" . esc_js( $name ) . "'" ),
+		( empty( $properties ) ? '{}' : wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $properties ) ) ),
+		( empty( $options ) ? '{}' : wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $options ) ) ),
+	)
+);
+?>
+);
+<?php if ( $http_event ) : ?>
+fetch(
+	'<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
+	{
+		method: 'POST',
+		body: new URLSearchParams({
+			action: 'segment_unset_cookie',
+			key: '<?php echo esc_js( $http_event ); ?>',
+			'segment-nonce': '<?php echo esc_js( wp_create_nonce( 'segment-unset_cookie' ) ); ?>',
+		}),
+	}
+);
+<?php endif; ?>
 </script>

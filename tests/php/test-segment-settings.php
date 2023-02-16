@@ -1,11 +1,11 @@
 <?php
 class Segment_Settings_Test extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		wp_set_current_user( 0 );
 	}

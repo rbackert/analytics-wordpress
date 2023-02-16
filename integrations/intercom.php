@@ -1,4 +1,9 @@
 <?php
+/**
+ * Intercom
+ *
+ * @package analytics-wordpress
+ */
 
 /**
  * Filters the .identify() object if we have an authenticated user and Intercom API key is set.
@@ -11,6 +16,10 @@
  * @return array                  Modified array of user identity, passed to .identify() API.
  */
 function segment_intercom_integration( $identify, $settings ) {
+	if ( ! $identify ) {
+		return $identify;
+	}
+
 	$user_email = $identify['user_id'];
 
 	if ( is_email( $user_email ) && ! empty( $settings['use_intercom_secure_mode'] ) ) {
@@ -18,7 +27,7 @@ function segment_intercom_integration( $identify, $settings ) {
 		$identify['options'] = isset( $identify['options'] ) ? $identify['options'] : array();
 
 		$identify['options']['Intercom'] = array(
-			'userHash' => hash_hmac( 'sha256', $user_email, $settings['use_intercom_secure_mode'] )
+			'userHash' => hash_hmac( 'sha256', $user_email, $settings['use_intercom_secure_mode'] ),
 		);
 	}
 
