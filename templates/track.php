@@ -7,31 +7,29 @@
 
 ?>
 <script type="text/javascript">
-analytics.track(<?php echo '"' . esc_js( $event ) . '"'; ?>
+analytics.track(
 <?php
-echo ', ' . (
-	empty( $properties )
-		? '{}'
-		: wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $properties ) )
+echo implode(
+	',',
+	array(
+		"'" . esc_js( $event ) . "'",
+		( empty( $properties ) ? '{}' : wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $properties ) ) ),
+		( empty( $options ) ? '{}' : wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $options ) ) ),
+	)
 );
-if ( ! empty( $options ) ) {
-	echo ', ' . wp_json_encode( Segment_Analytics_WordPress::esc_js_deep( $options ) ); }
 ?>
 );
 <?php if ( $http_event ) : ?>
-analytics.ajaxurl = "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>";
-
-jQuery( document ).ready( function( $ ) {
-	var data = {
-		action : 'segment_unset_cookie',
-		key    : '<?php echo esc_js( $http_event ); ?>',
-		'segment-nonce': <?php echo wp_json_encode( wp_create_nonce( 'segment-unset_cookie' ) ); ?>,
-	},
-	success = function( response ) {
-		console.log( response );
-	};
-
-	$.post( analytics.ajaxurl, data, success );
-});
+fetch(
+	'<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>',
+	{
+		method: 'POST',
+		body: new URLSearchParams({
+			action: 'segment_unset_cookie',
+			key: '<?php echo esc_js( $http_event ); ?>',
+			'segment-nonce': '<?php echo esc_js( wp_create_nonce( 'segment-unset_cookie' ) ); ?>',
+		}),
+	}
+);
 <?php endif; ?>
 </script>
