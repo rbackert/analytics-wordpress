@@ -1,5 +1,5 @@
 {
-    "name": "segment/analytics-wordpress",
+    "name": "segmentio/analytics-wordpress",
     "description": "The hassle-free way to integrate analytics into any WordPress site.",
     "type": "wordpress-plugin",
     "require-dev": {
@@ -14,13 +14,19 @@
     "license": "GPLv2",
     "authors": [
         {
+			"name": "Segment.io <friends@segment.com>",
+			"homepage": "https://segment.com/"
+		},
+        {
             "name": "Mindgrub",
-            "email": "wordpress@mindgrub.com"
+            "email": "wordpress@mindgrub.com",
+            "homepage": "https://mindgrub.com"
         }
     ],
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true
         }
     },
     "scripts": {
@@ -29,5 +35,8 @@
         "cf": "phpcbf",
         "test": "phpunit",
         "lint": "parallel-lint --exclude .git --exclude vendor --exclude node_modules ."
+    },
+    "require": {
+        "composer/installers": "^2.2"
     }
 }
