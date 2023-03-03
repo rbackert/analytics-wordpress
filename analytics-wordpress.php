@@ -25,7 +25,7 @@ class Segment_Analytics_WordPress {
 	/**
 	 * Current plugin version.
 	 */
-	const VERSION = '1.0.13';
+	const VERSION = '1.0.14';
 
 	/**
 	 * The singleton instance of Segment_Analytics_WordPress.
