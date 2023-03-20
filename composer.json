@@ -37,6 +37,6 @@
         "lint": "parallel-lint --exclude .git --exclude vendor --exclude node_modules ."
     },
     "require": {
-        "composer/installers": "^2.2"
+        "composer/installers": "^1.0 || ^2.0"
     }
 }
